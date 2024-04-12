@@ -149,7 +149,7 @@ def node_from_qc(quantum_circuit, parent_node, roll_out):
         raise TypeError
 
 
-def select(node, exploration=1.0):
+def select(node, exploration=0.4):
     l = np.log(node.visits)
     children_with_values = [(child, child.value / child.visits + exploration * np.sqrt(l / child.visits)) for child in node.children]
     selected_child = max(children_with_values, key=lambda x: x[1])[0]
