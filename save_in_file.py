@@ -63,3 +63,61 @@ def run_and_savepkl(evaluation_function, criteria, variable_qubits, ancilla_qubi
         print(f"Files saved in experiments/ as '{file_path}'")
     else:
         print(f'File already exists: {file_path}')
+
+def add_columns(evaluation_function, criteria, budget, n_iter, branches, epsilon, stop_deterministic, roll_out_steps, rollout_type, gradient, ucb, gate_set='continuous'):
+    """Adds the column of the cost function during the search, and apply the gradient descent on the best circuit and save it the column Adam"""
+    # Get best paths
+    qc_path = get_paths(evaluation_function, criteria, branches, budget, roll_out_steps, rollout_type, epsilon, stop_deterministic, ucb, n_iter)[0]
+
+    for i in range(n_iter):
+        directory, filename = get_filename(evaluation_function, criteria, budget, branches, ucb=ucb, iteration=i, gate_set=gate_set, rollout_type=rollout_type, roll_out_steps=roll_out_steps, epsilon=epsilon, stop_deterministic=stop_deterministic, image=False)
+        df = pd.read_pickle(directory + filename + '.pkl')
+        if 'cost' in df.columns:
+            print('Cost column already created')
+            column_cost = df['cost']
+        else:
+            # Create column of the cost values along the tree path
+            column_cost = list(map(lambda x: evaluation_function(x, cost=True), qc_path[i]))
+            # Add the columns to the pickle file
+            df['cost'] = column_cost
+        if 'Adam' in df.columns:
+            print('Angle parameter optimization already performed')
+        else:
+            # Get last circuit in the tree path
+            quantum_circuit_last = qc_path[i][-1]
+            # Apply gradient on teh last circuit and create a column to save it
+            final_result = evaluation_function(quantum_circuit_last, ansatz='', cost=False, gradient=True)
+            column_adam = [[None]]*df.shape[0]
+            column_adam[-1] = final_result
+
+            # Apply gradient on the best circuit if the best is not the last in the path
+            if gradient:
+                index = column_cost.index(min(column_cost))
+                if index != len(qc_path[i]):
+                    quantum_circuit_best = qc_path[i][index]
+                    best_result = evaluation_function(quantum_circuit_best, ansatz='', cost=False, gradient=True)
+                    column_adam[index] = best_result
+                df["Adam"] = column_adam
+
+            df.to_pickle(os.path.join(directory+filename + '.pkl'))
+            print('Columns added to: ', directory+filename)
+
+def get_paths(evaluation_function, criteria, branches, budget, roll_out_steps, rollout_type, epsilon, stop_deterministic, ucb, n_iter=10):
+    """ It opens the .pkl files and returns quantum circuits along the best path for all the independent run
+    :return: four list of lists
+    """
+    qc_along_path = []
+    children, visits, value = [], [], []
+    for i in range(n_iter):
+        directory, filename = get_filename(evaluation_function, criteria, budget, branches, iteration=i, rollout_type=rollout_type, epsilon=epsilon, stop_deterministic=stop_deterministic, roll_out_steps=roll_out_steps, image=False, ucb=ucb)
+
+        if os.path.isfile(directory+filename+'.pkl'):
+            df = pd.read_pickle(directory+filename+'.pkl')
+            qc_along_path.append([circuit for circuit in df['qc']])
+            children.append(df['children'].tolist())
+            value.append(df['value'].tolist())
+            visits. append(df['visits'].tolist())
+        else:
+            print('here')
+            return FileNotFoundError
+    return qc_along_path, children, visits, value

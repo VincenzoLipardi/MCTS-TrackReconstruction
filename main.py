@@ -16,6 +16,7 @@ UCB = 0.5
 GATE_SET = "continuous"  # Ensure it matches the expected case in the function
 ROTYPE = "classic"
 ROSTEPS = 0
+GRADIENT=True
 
 # Call the run_and_savepkl function with the defined variables
 for i in range(ITERATIONS):
@@ -36,3 +37,18 @@ for i in range(ITERATIONS):
         rollout_type=ROTYPE,
         roll_out_steps=ROSTEPS,
         verbose=False)
+    
+sif.add_columns(
+    evaluation_function=OBJ_FUNC,
+    criteria=CRITERIA,
+    budget=BUDGET,
+    n_iter=ITERATIONS,
+    branches=BRANCHES,
+    epsilon=EPS,
+    stop_deterministic=STOP,
+    roll_out_steps=ROSTEPS,
+    rollout_type=ROTYPE,
+    gradient=GRADIENT,
+    ucb=UCB,
+    gate_set=GATE_SET
+)
