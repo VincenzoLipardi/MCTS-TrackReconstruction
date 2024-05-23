@@ -1,5 +1,5 @@
-from trackhhl.event_model.event_model import Event, Segment
-from trackhhl.hamiltonians.hamiltonian import Hamiltonian
+from TrackHHL.trackhhl.event_model.event_model import Event, Segment
+from TrackHHL.trackhhl.hamiltonians.hamiltonian import Hamiltonian
 from itertools import product, count
 from scipy.sparse import eye
 from scipy.sparse.linalg import cg

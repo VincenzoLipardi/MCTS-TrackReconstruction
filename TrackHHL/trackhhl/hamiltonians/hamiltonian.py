@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from trackhhl.event_model.event_model import Event
+from TrackHHL.trackhhl.event_model.event_model import Event
 
 class Hamiltonian(ABC):
     

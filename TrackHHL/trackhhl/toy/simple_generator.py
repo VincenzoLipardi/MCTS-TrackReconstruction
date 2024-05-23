@@ -1,5 +1,5 @@
 import numpy as np
-import trackhhl.event_model as em
+import TrackHHL.trackhhl.event_model.event_model as em
 import dataclasses
 from itertools import count
 

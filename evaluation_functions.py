@@ -21,3 +21,7 @@ def track_recon(quantum_circuit, ansatz='all', cost=False, gradient=False):
         return problem.costFunc(params=[0.1], quantum_circuit=quantum_circuit, ansatz=ansatz)
     else:
         return problem.getReward(params=[0.1], quantum_circuit=quantum_circuit, ansatz=ansatz)
+
+qc = QuantumCircuit(5)
+
+print(track_recon(qc))

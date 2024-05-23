@@ -26,7 +26,9 @@ ham = hamiltonian.SimpleHamiltonian(
 ham.construct_hamiltonian(event=event)
 
 matrix = ham.A.todense()
+print(matrix)
 pauli_decomp = qml.pauli_decompose(matrix,pauli=True)
+print(pauli_decomp)
 pauli_string_result, coeffs_list = convert_to_pauli_string(pauli_decomp)
 save_to_json(pauli_string_result, 'pauli_string.json')
 save_to_json(coeffs_list, 'coeffs_list.json')
