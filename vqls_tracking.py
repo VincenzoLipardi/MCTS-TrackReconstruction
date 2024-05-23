@@ -44,11 +44,14 @@ def save_to_json(data: Any, file_path: str) -> None:
 
 class VQLS_XENO:
     # https://pennylane.ai/qml/demos/tutorial_vqls/
-    def __init__(self, c, pauli_string):
+    def __init__(self, c, pauli_string, qubits):
         """ Solving linear equation through a quantum variational approach A|x> = |b>.
         :param c: list. List of coefficients of the linear combination A = c_0 A_0 + c_1 A_1 ...
         """
-        self.n_qubits = 3  # Number of system qubits.
+        if qubits!= len(pauli_string[0]):
+            raise ValueError('Number of qubits does not match with the problem')
+        self.n_qubits = qubits  # Number of system qubits.
+    
         self.n_shots = 10 ** 6  # Number of quantum measurements.
         self.tot_qubits = self.n_qubits + 1  # Addition of an ancillary qubit.
         self.ancilla_idx = self.n_qubits  # Index of the ancillary qubit (last position).
