@@ -132,10 +132,17 @@ class Node:
 
             return prob_stop()
 
-    def best_child(self):
-        children_with_values = [(child, child.value)
-                                for child in self.children]
-        return max(children_with_values, key=lambda x: x[1])[0]
+    def best_child(self, criteria):
+        children_with_values = [(child, child.value, child.visits) for child in self.children]
+        if criteria == 'value':
+            best = max(children_with_values, key=lambda x: x[1])[0]
+        elif criteria == 'average_value':
+            best = max(children_with_values, key=lambda x: x[1]/x[2])[0]
+        elif criteria == 'visits':
+            best = max(children_with_values, key=lambda x: x[2])[0]
+        else:
+            raise NotImplementedError
+        return best
 
 
 def node_from_qc(quantum_circuit, parent_node, roll_out):
@@ -149,7 +156,7 @@ def node_from_qc(quantum_circuit, parent_node, roll_out):
         raise TypeError
 
 
-def select(node, exploration=0.4):
+def select(node, exploration=.4):
     l = np.log(node.visits)
     children_with_values = [(child, child.value / child.visits + exploration * np.sqrt(l / child.visits)) for child in node.children]
     selected_child = max(children_with_values, key=lambda x: x[1])[0]
@@ -202,19 +209,21 @@ def modify_prob_choice(dictionary, len_qc):
     return modified_dict
 
 
-def commit(epsilon, current_node):
+def commit(epsilon, current_node, criteria):
     # It commits to the best action if the node has explored enough
+
     if epsilon is not None:
         coin = random.uniform(0, 1)
         if coin >= epsilon:
-            current_node = current_node.best_child()
+            current_node = current_node.best_child(criteria=criteria)
+
     else:
-        current_node = current_node.best_child()
+        current_node = current_node.best_child(criteria=criteria)
 
     return current_node
 
 
-def mcts(root, budget, evaluation_function, rollout_type, roll_out_steps, branches, choices, epsilon, stop_deterministic, verbose=False):
+def mcts(root, budget, evaluation_function, criteria, rollout_type, roll_out_steps, branches, choices, epsilon, stop_deterministic, ucb_value=0.4, verbose=False):
     prob_choice = {'a': 100, 'd': 0, 's': 0, 'c': 0}
     original_root = root
     if verbose:
@@ -228,8 +237,9 @@ def mcts(root, budget, evaluation_function, rollout_type, roll_out_steps, branch
         current_node = root
 
         if current_node.visits > budget/20 and len(current_node.children) > 2:
-            root = commit(epsilon, current_node)
-            print('commit to', root)
+            root = commit(epsilon, current_node, criteria)
+            if verbose:
+                print('commit to', root)
             current_node = root
 
 
@@ -238,13 +248,15 @@ def mcts(root, budget, evaluation_function, rollout_type, roll_out_steps, branch
 
         # Selection
         while not current_node.isTerminal and current_node.is_fully_expanded(branches=branches):
-            current_node = select(current_node)
-            print('selection: ', current_node)
+            current_node = select(current_node, ucb_value)
+            if verbose:
+                print('selection: ', current_node)
 
         # Expansion
         if not current_node.isTerminal:
             current_node = expand(current_node, prob_choice=prob_choice, stop_deterministic=stop_deterministic)
-            print('Node Expanded:\n', current_node)
+            if verbose:
+                print('Node Expanded:\n', current_node)
 
 
         # Simulation ---> In this version is not used as rollout has to be 0
@@ -275,8 +287,6 @@ def mcts(root, budget, evaluation_function, rollout_type, roll_out_steps, branch
         if current_node.tree_depth == 2*n_qubits:
             prob_choice = choices
 
-
-    print('Last epoch:', epoch_counter)
     # Return the best
     best_node = original_root
 
@@ -290,5 +300,5 @@ def mcts(root, budget, evaluation_function, rollout_type, roll_out_steps, branch
         children.append(len(best_node.children))
         value.append(best_node.value)
         visits.append(best_node.visits)
-        best_node = best_node.best_child()
+        best_node = best_node.best_child(criteria=criteria)
     return {'qc': qc_path, 'children': children, 'visits': visits, 'value': value}
