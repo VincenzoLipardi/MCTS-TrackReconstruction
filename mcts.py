@@ -224,7 +224,7 @@ def commit(epsilon, current_node, criteria):
     return current_node
 
 
-def mcts(root, budget, evaluation_function, criteria, rollout_type, roll_out_steps, branches, choices, epsilon, stop_deterministic, ucb_value=0.4, verbose=False):
+def mcts(root, budget, evaluation_function, criteria, rollout_type, roll_out_steps, branches, choices, epsilon, stop_deterministic, ucb_value=0.4, verbose=False, loading_bar=False):
     prob_choice = {'a': 100, 'd': 0, 's': 0, 'c': 0}
     original_root = root
     if verbose:
@@ -234,7 +234,7 @@ def mcts(root, budget, evaluation_function, criteria, rollout_type, roll_out_ste
     evaluate(root, evaluation_function)
     root.visits = 1
 
-    if verbose == True:
+    if loading_bar == True:
         budget_range = tqdm(range(budget))
     else:
         budget_range = range(budget)

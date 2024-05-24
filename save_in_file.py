@@ -31,7 +31,7 @@ def get_filename(evaluation_function, criteria, budget, branches, iteration, eps
     
     return directory, filename
 
-def run_and_savepkl(evaluation_function, criteria, variable_qubits, ancilla_qubits, budget, max_depth, iteration, branches, choices, epsilon, stop_deterministic, ucb, gate_set='continuous', rollout_type="classic", roll_out_steps=None, verbose=False):
+def run_and_savepkl(evaluation_function, criteria, variable_qubits, ancilla_qubits, budget, max_depth, iteration, branches, choices, epsilon, stop_deterministic, ucb, gate_set='continuous', rollout_type="classic", roll_out_steps=None, verbose=False, loading_bar=False):
     """
     Runs the MCTS on the problem defined in evaluation_function and saves the result (the best path) in a .pkl file.
     """
@@ -55,7 +55,7 @@ def run_and_savepkl(evaluation_function, criteria, variable_qubits, ancilla_qubi
         root = mcts.Node(Circuit(variable_qubits=variable_qubits, ancilla_qubits=ancilla_qubits), max_depth=max_depth)
         
         # Run the MCTS algorithm
-        final_state = mcts.mcts(root, budget=budget, branches=branches, evaluation_function=evaluation_function, criteria=criteria, rollout_type=rollout_type, roll_out_steps=roll_out_steps, choices=choices, epsilon=epsilon, stop_deterministic=stop_deterministic, ucb_value=ucb, verbose=verbose)
+        final_state = mcts.mcts(root, budget=budget, branches=branches, evaluation_function=evaluation_function, criteria=criteria, rollout_type=rollout_type, roll_out_steps=roll_out_steps, choices=choices, epsilon=epsilon, stop_deterministic=stop_deterministic, ucb_value=ucb, verbose=verbose, loading_bar=loading_bar)
         
         # Save the results
         df = pd.DataFrame(final_state)

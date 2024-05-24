@@ -5,9 +5,9 @@ OBJ_FUNC = track_recon
 CRITERIA = "average_value"
 VAR_q = 3
 Anc_q = 0
-BUDGET = 500
+BUDGET = 10000
 MAX_DEPTH = 10
-ITERATIONS = 3
+ITERATIONS = 5
 BRANCHES = False
 P_ACTIONS = {'a': 50, 'd': 10, 's': 20, 'c': 20, 'p': 0}
 EPS = None
@@ -36,7 +36,8 @@ for i in range(ITERATIONS):
         gate_set=GATE_SET,
         rollout_type=ROTYPE,
         roll_out_steps=ROSTEPS,
-        verbose=False)
+        verbose=False,
+        loading_bar=True)
     
 sif.add_columns(
     evaluation_function=OBJ_FUNC,
