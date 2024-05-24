@@ -2,6 +2,7 @@ import random
 import numpy as np
 from structure import Circuit, GateSet
 from qiskit import QuantumCircuit
+from tqdm import tqdm
 
 
 class Node:
@@ -233,7 +234,12 @@ def mcts(root, budget, evaluation_function, criteria, rollout_type, roll_out_ste
     evaluate(root, evaluation_function)
     root.visits = 1
 
-    for _ in range(budget):
+    if verbose == True:
+        budget_range = tqdm(range(budget))
+    else:
+        budget_range = range(budget)
+
+    for _ in budget_range:
         current_node = root
 
         if current_node.visits > budget/20 and len(current_node.children) > 2:
