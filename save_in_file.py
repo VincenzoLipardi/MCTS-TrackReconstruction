@@ -80,28 +80,30 @@ def add_columns(evaluation_function, criteria, budget, n_iter, branches, epsilon
             column_cost = list(map(lambda x: evaluation_function(x, cost=True), qc_path[i]))
             # Add the columns to the pickle file
             df['cost'] = column_cost
-        if 'Adam' in df.columns:
-            print('Angle parameter optimization already performed')
-        else:
-            # Get last circuit in the tree path
-            quantum_circuit_last = qc_path[i][-1]
-            # Apply gradient on teh last circuit and create a column to save it
-            final_result = evaluation_function(quantum_circuit_last, ansatz='', cost=False, gradient=True)
-            column_adam = [[None]]*df.shape[0]
-            column_adam[-1] = final_result
+        if gradient:
+            if 'Adam' in df.columns:
+                print('Angle parameter optimization already performed')
+            else:
+                # Get last circuit in the tree path
+                quantum_circuit_last = qc_path[i][-1]
 
-            # Apply gradient on the best circuit if the best is not the last in the path
-            if gradient:
-                index = column_cost.index(min(column_cost))
+                # Apply gradient on the last circuit and create a column to save it
+                final_result = evaluation_function(quantum_circuit_last, ansatz='', cost=False, gradient=True)
+                column_adam = [[None]]*df.shape[0]
+                column_adam[-1] = final_result
+
+                # Apply gradient on the best circuit if the best is not the last in the path
+                index = column_cost.idxmin()
                 if index != len(qc_path[i]):
                     quantum_circuit_best = qc_path[i][index]
                     best_result = evaluation_function(quantum_circuit_best, ansatz='', cost=False, gradient=True)
                     column_adam[index] = best_result
                 df["Adam"] = column_adam
 
-            df.to_pickle(os.path.join(directory+filename + '.pkl'))
-            print('Columns added to: ', directory+filename)
+        df.to_pickle(os.path.join(directory+filename + '.pkl'))
+        print('Columns added to: ', directory+filename)
 
+        
 def get_paths(evaluation_function, criteria, branches, budget, roll_out_steps, rollout_type, epsilon, stop_deterministic, ucb, n_iter=10):
     """ It opens the .pkl files and returns quantum circuits along the best path for all the independent run
     :return: four list of lists
