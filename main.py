@@ -2,17 +2,17 @@ from evaluation_functions import track_recon
 import save_in_file as sif
 # Define the necessary variables
 OBJ_FUNC = track_recon
-CRITERIA = "average_value"
+CRITERIA = "value"
 VAR_q = 3
 Anc_q = 0
-BUDGET = 10000
+BUDGET = 50000
 MAX_DEPTH = 10
-ITERATIONS = 5
+ITERATIONS = 3
 BRANCHES = False
 P_ACTIONS = {'a': 50, 'd': 10, 's': 20, 'c': 20, 'p': 0}
 EPS = None
 STOP = False
-UCB = 0.5
+UCB = 0.4
 GATE_SET = "continuous"  # Ensure it matches the expected case in the function
 ROTYPE = "classic"
 ROSTEPS = 0

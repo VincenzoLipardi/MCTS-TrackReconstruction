@@ -15,9 +15,8 @@ def track_recon(quantum_circuit, ansatz='all', cost=False, gradient=False):
     else:
         return problem.getReward(params=[0.1], quantum_circuit=quantum_circuit, ansatz=ansatz)
 
-
 # SYSTEMS OF LINEAR EQUATIONS
 pauli_string = load_from_json('pauli_string.json')
 c = load_from_json('coeffs_list.json')
-print(c, pauli_string)
+#print(c, pauli_string)
 vqls_xeno = VQLS_XENO(c=c, pauli_string=pauli_string, qubits=3)
