@@ -19,4 +19,4 @@ def track_recon(quantum_circuit, ansatz='all', cost=False, gradient=False):
 pauli_string = load_from_json('pauli_string.json')
 c = load_from_json('coeffs_list.json')
 #print(c, pauli_string)
-vqls_xeno = VQLS_XENO(c=c, pauli_string=pauli_string, qubits=3)
+vqls_xeno = VQLS_XENO(c=c, pauli_string=pauli_string, qubits=4)

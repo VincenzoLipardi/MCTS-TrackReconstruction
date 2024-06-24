@@ -3,11 +3,11 @@ import save_in_file as sif
 # Define the necessary variables
 OBJ_FUNC = track_recon
 CRITERIA = "value"
-VAR_q = 3
+VAR_q = 4
 Anc_q = 0
-BUDGET = 50000
+BUDGET = 100
 MAX_DEPTH = 10
-ITERATIONS = 3
+ITERATIONS = 1
 BRANCHES = False
 P_ACTIONS = {'a': 50, 'd': 10, 's': 20, 'c': 20, 'p': 0}
 EPS = None
