@@ -2,7 +2,7 @@ import TrackHHL.trackhhl.toy.simple_generator as toy
 from gen_dp import generate_hamiltonian
 import TrackHHL.trackhhl.hamiltonians.simple_hamiltonian as hamiltonian
 import pennylane as qml
-import numpy as np
+import pennylane.numpy as np
 
 N_MODULES = 3
 N_PARTICLES = 2
@@ -69,7 +69,7 @@ def ansatz(params, wires):
     qml.CNOT(wires=[1, 2])
 
 # Define the cost function
-@qml.qnode(dev)
+@qml.qnode(dev, diff_method="parameter-shift")
 def cost_fn(params):
     ansatz(params, wires=[0, 1, 2])
     return qml.expval(H)
@@ -82,10 +82,11 @@ def state_fn(params):
 # Initialize parameters
 np.random.seed(0)
 params = np.random.normal(0, np.pi, 8)
+theta = np.array(params, requires_grad=True)
 
 # Choose an optimizer
 #opt = qml.QNGOptimizer(stepsize=0.01, approx="block-diag")
-opt = qml.AdamOptimizer(0.10)
+opt = qml.AdamOptimizer(0.01)
 #opt = NesterovMomentumOptimizer(0.01)
 steps = 201
 conv_tol = 1e-06
