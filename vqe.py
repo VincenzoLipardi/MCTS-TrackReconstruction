@@ -12,7 +12,7 @@ class VQE:
                 self.hamiltonian = qml.Hermitian(hamiltonian, wires=range(0, n_qubits))
             else:
                 self.hamiltonian = qml.Hermitian(0.5 * (hamiltonian + hamiltonian.T.conj()), wires=range(0, n_qubits))
-            self.dev = qml.device('default.qubit', wires=n_qubits)
+        self.dev = qml.device('default.qubit', wires=n_qubits)
 
     def costFunc(self, params, quantum_circuit=None, ansatz=""):
         """
