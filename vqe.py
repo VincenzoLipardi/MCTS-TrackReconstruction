@@ -1,15 +1,18 @@
 import pennylane as qml
 from pennylane import numpy as np
 from qiskit import QuantumCircuit
-
+from pennylane.ops.op_math import Sum
 
 class VQE:
     def __init__(self, hamiltonian, n_qubits):
-        if is_hermitian(hamiltonian):
-            self.hemiltonian = qml.Hermitian(hamiltonian, wires=range(0, n_qubits))
+        if isinstance(hamiltonian, Sum):
+            self.hamiltonian = hamiltonian
         else:
-            self.hamiltonian = qml.Hermitian(0.5 * (hamiltonian + hamiltonian.T.conj()), wires=range(0, n_qubits))
-        self.dev = qml.device('default.qubit', wires=n_qubits)
+            if is_hermitian(hamiltonian):
+                self.hamiltonian = qml.Hermitian(hamiltonian, wires=range(0, n_qubits))
+            else:
+                self.hamiltonian = qml.Hermitian(0.5 * (hamiltonian + hamiltonian.T.conj()), wires=range(0, n_qubits))
+            self.dev = qml.device('default.qubit', wires=n_qubits)
 
     def costFunc(self, params, quantum_circuit=None, ansatz=""):
         """
