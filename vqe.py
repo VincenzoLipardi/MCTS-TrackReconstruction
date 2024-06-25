@@ -110,13 +110,13 @@ def is_hermitian(matrix):
 
 
 # Tutorial with a random matrix
-matrix = np.random.rand(4, 4)
-
-trial = VQE(hamiltonian=matrix, n_qubits=2)
-qc = QuantumCircuit(2)
-qc.h(0)
-qc.ry(0.1, 1)
-print("Gradient Descent on the angle parameters")
-trial.gradient_descent(quantum_circuit=qc)
+#matrix = np.random.rand(4, 4)
+#
+#trial = VQE(hamiltonian=matrix, n_qubits=2)
+#qc = QuantumCircuit(2)
+#qc.h(0)
+#qc.ry(0.1, 1)
+#print("Gradient Descent on the angle parameters")
+#trial.gradient_descent(quantum_circuit=qc)
 
 

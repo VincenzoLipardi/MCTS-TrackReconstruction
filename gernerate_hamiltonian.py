@@ -36,7 +36,7 @@ save_to_json(pauli_string_result, 'pauli_string.json')
 save_to_json(coeffs_list, 'coeffs_list.json')
 
 ############################################################################
-
+'''
 # Calculate eigenvalues and eigenvectors
 eigenvalues, eigenvectors = np.linalg.eigh(matrix)
 
@@ -129,4 +129,4 @@ ax2.set_xlabel("Hilbert space basis")
 ax2.set_title("Quantum probabilities")
 
 
-plt.show()
+plt.show()'''

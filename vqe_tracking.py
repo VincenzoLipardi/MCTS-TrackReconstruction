@@ -3,6 +3,9 @@ from gen_dp import generate_hamiltonian
 import TrackHHL.trackhhl.hamiltonians.simple_hamiltonian as hamiltonian
 import pennylane as qml
 import pennylane.numpy as np
+from qiskit import QuantumCircuit
+from vqe import VQE
+import pickle
 
 N_MODULES = 3
 N_PARTICLES = 2
@@ -30,8 +33,16 @@ ham = hamiltonian.SimpleHamiltonian(
     delta=1.0)
 
 A, b, components, segments = generate_hamiltonian(event, params)
+H = qml.pauli_decompose(A)
+
+print(len(H.wires))
+
 print(A)
 
+filename = 'vqe_hamiltonian.pkl'
+with open(filename, 'wb') as file:
+    pickle.dump(H, file)
+'''
 eigenvalues, eigenvectors = np.linalg.eigh(A)
 
 # Identify the ground state (smallest eigenvalue)
@@ -49,7 +60,8 @@ print(ground_state_eigenvalue)
 print("\nGround state eigenvector:")
 print(ground_state_eigenvector)
 
-H = qml.pauli_decompose(A)
+
+
 
 # Define the device
 dev = qml.device("default.qubit", wires=3)
@@ -59,36 +71,40 @@ def ansatz(params, wires):
     qml.RY(params[0], wires=wires[0])
     qml.RY(params[1], wires=wires[1])
     qml.RY(params[2], wires=wires[2])
+    qml.RY(params[3], wires=wires[3])
+    qml.RY(params[8], wires=wires[4])
     qml.CNOT(wires=[0, 1])
-    qml.RY(params[3], wires=wires[0])
     qml.CNOT(wires=[1, 2])
-    qml.RY(params[4], wires=wires[1])
-    qml.RY(params[5], wires=wires[2])
-    qml.RY(params[6], wires=wires[1])
-    qml.RY(params[7], wires=wires[2])
+    qml.CNOT(wires=[2, 3])
+    qml.CNOT(wires=[3, 4])
+    qml.RY(params[4], wires=wires[0])
+    qml.RY(params[5], wires=wires[1])
+    qml.RY(params[6], wires=wires[2])
+    qml.RY(params[7], wires=wires[3])
+    qml.RY(params[9], wires=wires[4])
     qml.CNOT(wires=[1, 2])
 
 # Define the cost function
 @qml.qnode(dev, diff_method="parameter-shift")
 def cost_fn(params):
-    ansatz(params, wires=[0, 1, 2])
+    ansatz(params, wires=[0, 1, 2, 3, 4])
     return qml.expval(H)
 
 @qml.qnode(dev)
 def state_fn(params):
-    ansatz(params, wires=[0, 1, 2])
+    ansatz(params, wires=[0, 1, 2, 3, 4])
     return qml.state()
 
 # Initialize parameters
 np.random.seed(0)
-params = np.random.normal(0, np.pi, 8)
+params = np.random.normal(0, np.pi, 10)
 theta = np.array(params, requires_grad=True)
 
 # Choose an optimizer
 #opt = qml.QNGOptimizer(stepsize=0.01, approx="block-diag")
 opt = qml.AdamOptimizer(0.01)
 #opt = NesterovMomentumOptimizer(0.01)
-steps = 201
+steps = 501
 conv_tol = 1e-06
 
 for i in range(steps):
@@ -96,7 +112,7 @@ for i in range(steps):
     val = cost_fn(params)
     conv = np.abs(val - prev_val)
 
-    if i % 10 == 0:
+    if i % 50 == 0:
         print(
             "Iteration = {:},  Cost = {:.8f} ,  Convergence parameter = {"
             ":.8f}".format(i, val, conv))
@@ -123,9 +139,9 @@ ax1.set_xlim(-0.5, len(final_state) - 0.5)
 ax1.set_xlabel("Vector space basis")
 ax1.set_title("VQE probabilities")
 
-ax2.bar(np.arange(len(vqe_solution)), normalized_array, color="limegreen")
+ax2.bar(np.arange(len(vqe_solution)), vqe_solution, color="limegreen")
 ax2.set_xlim(-0.5, len(vqe_solution) - 0.5)
 ax2.set_xlabel("Hilbert space basis")
 ax2.set_title("Classical probabilities")
 
-plt.show()
+plt.show()'''

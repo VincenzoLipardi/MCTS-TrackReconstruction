@@ -1,9 +1,9 @@
-from evaluation_functions import track_recon
+from evaluation_functions import track_vqls, track_vqe
 import save_in_file as sif
 # Define the necessary variables
-OBJ_FUNC = track_recon
+OBJ_FUNC = track_vqe
 CRITERIA = "value"
-VAR_q = 4
+VAR_q = 3
 Anc_q = 0
 BUDGET = 100
 MAX_DEPTH = 10
@@ -36,7 +36,7 @@ for i in range(ITERATIONS):
         gate_set=GATE_SET,
         rollout_type=ROTYPE,
         roll_out_steps=ROSTEPS,
-        verbose=False,
+        verbose=True,
         loading_bar=True)
     
 sif.add_columns(

@@ -2,6 +2,7 @@ import heapq
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, Aer, transpile
 from vqls_tracking import VQLS_XENO, load_from_json
 from vqe import VQE
+import pickle
 
 
 def track_vqls(quantum_circuit, ansatz='all', cost=False, gradient=False):
@@ -19,7 +20,10 @@ def track_vqls(quantum_circuit, ansatz='all', cost=False, gradient=False):
 
 
 def track_vqe(quantum_circuit, ansatz='all', cost=False, gradient=False):
-    problem = VQE(hamiltonian=, n_qubits=)
+    filename = 'vqe_hamiltonian.pkl'
+    with open(filename, 'rb') as file:
+        loaded_H = pickle.load(file)
+    problem = VQE(hamiltonian=loaded_H, n_qubits=len(loaded_H.wires))
     if cost and gradient:
         raise ValueError('Cannot return both cost and gradient descent result')
     if gradient:
@@ -31,7 +35,7 @@ def track_vqe(quantum_circuit, ansatz='all', cost=False, gradient=False):
 
 
 # SYSTEMS OF LINEAR EQUATIONS
-pauli_string = load_from_json('pauli_string.json')
-c = load_from_json('coeffs_list.json')
-# print(c, pauli_string)
-vqls_xeno = VQLS_XENO(c=c, pauli_string=pauli_string, qubits=4)
+#pauli_string = load_from_json('pauli_string.json')
+#c = load_from_json('coeffs_list.json')
+## print(c, pauli_string)
+#vqls_xeno = VQLS_XENO(c=c, pauli_string=pauli_string, qubits=4)
