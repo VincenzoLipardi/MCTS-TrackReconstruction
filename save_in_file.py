@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from structure import Circuit
 import mcts
+import numpy as np
 
 
 def get_filename(evaluation_function, criteria, budget, branches, iteration, epsilon, stop_deterministic, rollout_type, roll_out_steps, ucb, image, gradient=False, gate_set='continuous'):
@@ -93,7 +94,12 @@ def add_columns(evaluation_function, criteria, budget, n_iter, branches, epsilon
                 column_adam[-1] = final_result
 
                 # Apply gradient on the best circuit if the best is not the last in the path
-                index = column_cost.idxmin()
+                if isinstance(column_cost, list):
+                    index = column_cost.index(min(column_cost))
+                else:
+                    column_cost = np.array(column_cost)
+                    # index = column_cost.idxmin()
+                    index = np.argmin(column_cost)
                 if index != len(qc_path[i]):
                     quantum_circuit_best = qc_path[i][index]
                     best_result = evaluation_function(quantum_circuit_best, ansatz='', cost=False, gradient=True)
