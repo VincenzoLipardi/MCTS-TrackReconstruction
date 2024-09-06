@@ -5,7 +5,7 @@ import pennylane as qml
 from pennylane import numpy as np
 from pennylane.optimize import NesterovMomentumOptimizer
 
-N_MODULES = 3
+N_MODULES = 5
 N_PARTICLES = 2
 LX = float("+inf")
 LY = float("+inf")

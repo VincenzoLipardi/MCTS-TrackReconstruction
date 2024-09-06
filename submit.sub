@@ -1,0 +1,9 @@
+executable          = MCTQS.sh
+output              = outputs/output_$(Cluster).out
+error               = errors/error_$(Cluster).err
+log                 = logs/log_$(Cluster).log
++JobCategory        = "long"
++UseOS              = "el9"
+request_memory      = 10 GB
+arguments           = $(Process)
+queue 500

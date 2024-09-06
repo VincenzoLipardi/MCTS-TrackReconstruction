@@ -78,7 +78,7 @@ class VQE:
                 print('Landscape is flat')
                 break
 
-        return energy
+        return energy, theta
 
 
 def get_parameters(quantum_circuit):

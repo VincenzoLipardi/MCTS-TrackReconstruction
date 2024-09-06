@@ -7,8 +7,8 @@ from qiskit import QuantumCircuit
 from vqe import VQE
 import pickle
 
-N_MODULES = 3
-N_PARTICLES = 2
+N_MODULES = 5
+N_PARTICLES = 16
 LX = float("+inf")
 LY = float("+inf")
 Z_SPACING = 1.0
@@ -35,21 +35,33 @@ ham = hamiltonian.SimpleHamiltonian(
 A, b, components, segments = generate_hamiltonian(event, params)
 H = qml.pauli_decompose(A)
 
-print(len(H.wires))
-
-print(A)
-
-filename = 'vqe_hamiltonian.pkl'
-with open(filename, 'wb') as file:
-    pickle.dump(H, file)
-'''
+# Calculate eigenvalues and eigenvectors of the Hamiltonian matrix A
 eigenvalues, eigenvectors = np.linalg.eigh(A)
 
 # Identify the ground state (smallest eigenvalue)
 ground_state_index = np.argmin(eigenvalues)
-ground_state_eigenvalue = eigenvalues[ground_state_index]
+#ground_state_eigenvalue = eigenvalues[ground_state_index]
 ground_state_eigenvector = eigenvectors[:, ground_state_index]
 
+# Prepare the dictionary to store in the .pkl file
+"""data_to_store = {
+    'Hamiltonian': H,
+    'Ground State Eigenvector': ground_state_eigenvector
+}"""
+
+# Save the dictionary in a .pkl file
+size = (N_MODULES-1)*(N_PARTICLES**2)
+#filename = 'vqe_hamiltonian_'+str(size)+'.pkl'
+filename = 'vqe_hamiltonian.pkl'
+with open(filename, 'wb') as file:
+    pickle.dump(H, file)
+    #pickle.dump(data_to_store, file)
+
+
+
+
+
+'''
 print("Eigenvalues:")
 print(eigenvalues)
 print(sum(abs(eigenvectors)))
