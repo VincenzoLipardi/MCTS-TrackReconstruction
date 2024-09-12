@@ -18,7 +18,7 @@ This repository presents an open-access code related to the paper "Variational Q
 - Setup a conda environment with python 3.10
 - Install the requirements with the following command: pip install -r requirements.txt
 
-2.** Navigate in the project**
+2. ** Navigate in the project**
 
 - Particle Track Problem encoded in the framework of VQAs": [evaluation_functions.py](/evaluation_functions.py), [vqe_tracking.py](/vqe_trackings.py), [vqls_tracking.py](/vqls_tracking.py).
 - MCTS implementation: [mcts.py](/mcts.py)
