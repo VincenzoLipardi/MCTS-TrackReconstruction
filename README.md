@@ -16,6 +16,6 @@ This repository presents an open-access code related to the paper "Variational Q
 ## Usage
 
 1. **Clone the Repository**:
-2. - clone the repository
+
 - setup a conda environment with python 3.10
 - install the requirements with the following command: pip install -r requirements.txt
