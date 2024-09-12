@@ -3,7 +3,7 @@
 
 ## Overview
 
-This repository presents an open-access code related to the paper "Variational Quantum Algorithms for Particle Track reconstruction" submitted to BNAIC 2024. We used a Monte Carlo Tree Search (MCTS) approach to design quantum ansatz for two different formulation of the particle track reconstruction problem within the framework of variational quantum algorithms.
+This repository presents an open-access code related to the paper "Variational Quantum Algorithms for Particle Track reconstruction" submitted to BNAIC 2024. We used a Monte Carlo Tree Search (MCTS) approach to design quantum ansatz for two different formulation of the particle track reconstruction problem within the framework of variational quantum algorithms (VQAs).
 
 ## Key Concepts
 
