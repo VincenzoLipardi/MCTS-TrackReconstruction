@@ -1,9 +1,9 @@
 
-# MCTS for Quantum Ansatz Search in Particle Reconstruction
+# MCTS for Quantum Ansatz Search in Variational Quantum Algorithms for Particle Track Reconstruction
 
 ## Overview
 
-This repository presents an innovative approach that combines Monte Carlo Tree Search (MCTS) with variational quantum algorithms for solving the Particle Reconstruction problem. In this framework, MCTS serves as a powerful heuristic search strategy to explore the space of quantum ansatz configurations, enabling efficient and effective solutions to the Particle Reconstruction problem within a variational quantum computing paradigm.
+This repository presents an open-access code related to the paper "Variational Quantum Algorithms for Particle Track reconstruction" submitted to BNAIC 2024. We used a Monte Carlo Tree Search (MCTS) approach to design quantum ansatz for two different formulation of the particle track reconstruction problem within the framework of variational quantum algorithms.
 
 ## Key Concepts
 
@@ -15,4 +15,7 @@ This repository presents an innovative approach that combines Monte Carlo Tree S
 
 ## Usage
 
-1. **Clone the Repository**: 
+1. **Clone the Repository**:
+2. - clone the repository
+- setup a conda environment with python 3.10
+- install the requirements with the following command: pip install -r requirements.txt
