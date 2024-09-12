@@ -7,15 +7,18 @@ This repository presents an open-access code related to the paper "Variational Q
 
 ## Key Concepts
 
-- **Monte Carlo Tree Search (MCTS)**: MCTS is employed as a search strategy to navigate the space of quantum ansatz configurations. By iteratively building and exploring a search tree, MCTS guides the selection of promising ansatz configurations for further evaluation.
-
-- **Variational Quantum Algorithms**: Particle Reconstruction is encoded as a variational quantum optimization problem, where the goal is to find the optimal parameters for a parameterized quantum circuit (ansatz) that minimizes a cost function representing the reconstruction quality.
-
-- **Quantum Ansatz**: A parameterized quantum circuit is chosen as the ansatz, with the parameters representing the degrees of freedom to be optimized. MCTS efficiently explores the space of these parameters to find configurations that yield accurate reconstructions.
+- **Monte Carlo Tree Search (MCTS)**: classical search technique employed to design quantum circuits. At each node correspond a quantum circuit and at each edge (action/move) a modification of it. 
+- **Variational Quantum Algorithms**: The particle track reconstruction is encoded as a variational quantum problem in two different setting.
+- **Quantum Ansatz**: Parameterized quantum circuit chosen to sove a certain variational quantum algorithm by optimizing its angle parameters.
 
 ## Usage
 
 1. **Clone the Repository**:
 
-- setup a conda environment with python 3.10
-- install the requirements with the following command: pip install -r requirements.txt
+- Setup a conda environment with python 3.10
+- Install the requirements with the following command: pip install -r requirements.txt
+
+2.** Navigate in the project**
+
+- Particle Track Problem encoded in the framework of VQAs": [evaluation_functions.py](/evaluation_functions.py), [vqe_tracking.py](/vqe_trackings.py), [vqls_tracking.py](/vqls_tracking.py).
+- MCTS implementation: [mcts.py](/mcts.py)
